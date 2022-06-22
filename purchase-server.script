@@ -1,0 +1,43 @@
+// How much RAM each purchased server will have. 
+var ram = 64;
+var thread = 24;
+var happened = false;
+// Continuously try to purchase servers until we've reached the maximum
+// amount of servers
+while (getPurchasedServers().length < getPurchasedServerLimit()) {
+
+		// every 2 servers double ram and thread count
+		if (getPurchasedServers().length > 0 && getPurchasedServers().length % 2 == 0 && !happened) {
+			happened = true;
+			ram *= 2;
+			thread *= 2;
+		}
+
+
+		if (getServerMoneyAvailable("home") > getPurchasedServerCost(ram)) {
+			// If we have enough money, then:
+			//  1. Purchase the server
+			//  2. Copy our hacking script onto the newly-purchased server
+			//  3. Run our hacking script on the newly-purchased server with 3 threads
+			//  4. Increment our iterator to indicate that we've bought a new server
+
+            //if we stop code and then run it again it wont reset progress of ram increase.
+			var pservers = getPurchasedServers();
+			for (var i = 0; i < pservers.length; i++) {
+				var serv = pservers[i];
+				if (getServerMaxRam(serv) > ram) {
+					max = getServerMaxRam(ram);
+				}
+			}
+			
+            
+            happened = false;
+			var hostname = purchaseServer("p - " + getPurchasedServers().length + " - " + ram, ram);
+			scp("early-hack-template.script", hostname);
+			if (thread < (Math.floor(getServerMaxRam(hostname) / getScriptRam("early-hack-template.script")))) {
+				thread = (Math.floor(getServerMaxRam(hostname) / getScriptRam("early-hack-template.script")));
+			}
+			exec("early-hack-template.script", hostname, thread, target);
+
+		}
+	}
