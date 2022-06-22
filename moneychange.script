@@ -1,0 +1,238 @@
+var target = "n00dles";
+nuke(target);
+var level = getPlayer().hacking;
+exec("script-startup.script", "home", 6, target);
+var minmoney = getServerMoneyAvailable(target)*100000;
+//server starting buy
+var ram = 64;
+var thread = 24;
+var happened=false;
+
+function activate(t) {
+	minmoney = getServerMoneyAvailable(t) * 0.5;
+	var threads = (Math.floor(getServerMaxRam(t) / getScriptRam("early-hack-template.script")));
+	scp("early-hack-template.script", t);
+	if (fileExists("BruteSSH.exe", "home")) {
+		brutessh(t);
+	}
+
+	if (fileExists("FTPCrack.exe", "home")) {
+		ftpcrack(t);
+	}
+
+	if (fileExists("relaySMTP.exe", "home")) {
+		relaysmtp(t);
+	}
+
+	if (fileExists("HTTPWorm.exe", "home")) {
+		httpworm(t);
+	}
+
+	if (fileExists("SQLInject.exe", "home")) {
+		sqlinject(t);
+	}
+	nuke(t);
+	exec("early-hack-template.script", t, threads, t);
+}
+while (true) {
+
+
+	// Get root access to target server
+	level = getPlayer().hacking;
+	var changed = false;
+	if (minmoney >= getServerMoneyAvailable(target)) {
+		//0 ports
+		if (level > 10 && level < 40) {
+			if (target != "joesguns") {
+				target = "joesguns";
+				changed = true;
+				activate(target);
+			}
+		}
+		else if (level > 40 && level < 50) {
+			if (target != "harakiri-sushi") {
+				target = "harakiri-sushi";
+				changed = true;
+				activate(target);
+			}
+		}
+		//1 port
+		if (fileExists("BruteSSH.exe", "home")) {
+			if (level > 50 && level < 100) {
+				if (target != "neo-net") {
+					target = "neo-net";
+					changed = true;
+					activate(target);
+				}
+			}
+			else if (level > 100 && level < 150) {
+				if (target != "iron-gym" && !phant) {
+					target = "iron-gym";
+					changed = true;
+					activate(target);
+				}
+			}
+		}
+		//2 ports
+		if (fileExists("FTPCrack.exe", "home")) {
+			if (level > 100 && level < 150) {
+				if (target != "phantasy") {
+					phant = true
+					target = "phantasy";
+					changed = true;
+					activate(target);
+				}
+			}
+			else if (level > 150 && level < 206) {
+				if (target != "silver-helix") {
+					target = "silver-helix";
+					changed = true;
+					activate(target);
+				}
+			}
+			else if (level > 206 && level < 301) {
+				if (target != "omega-net") {
+					target = "omega-net";
+					changed = true;
+					activate(target);
+				}
+			}
+			else if (level > 301 && level < 362) {
+				if (target != "the-hub") {
+					target = "the-hub";
+					changed = true;
+					activate(target);
+				}
+			}
+		}
+		//3 ports
+		if (fileExists("relaySMTP.exe", "home")) {
+			if (level > 362 && level < 403) {
+				if (target != "I.I.I.I") {
+					target = "I.I.I.I";
+					changed = true;
+					activate(target);
+				}
+			}
+			else if (level > 403 && level < 486) {
+				if (target != "rothman-uni") {
+					target = "rothman-uni";
+					changed = true;
+					activate(target);
+				}
+			}
+			else if (level > 486 && level < 521) {
+				if (target != "millenium-fitness") {
+					target = "millenium-fitness";
+					changed = true;
+					activate(target);
+				}
+			}
+			else if (level > 521 && level < 551) {
+				if (target != "rho-construction") {
+					target = "rho-construction";
+					changed = true;
+					activate(target);
+				}
+			}
+		}
+		//4 ports
+		if (fileExists("HTTPWorm.exe", "home")) {
+			if (level > 551 && level < 719) {
+				if (target != "alpha-ent") {
+					target = "alpha-ent";
+					changed = true;
+					activate(target);
+				}
+			}
+			else if (level > 719 && level < 799) {
+				if (target != "lexo-corp") {
+					target = "lexo-corp";
+					changed = true;
+					activate(target);
+				}
+			}
+		}
+		//5 ports
+		if (fileExists("SQLInject.exe", "home")) {
+			if (level > 799 && level < 820) {
+				if (target != "solaris") {
+					target = "solaris";
+					changed = true;
+					activate(target);
+				}
+			}
+			else if (level > 820 && level < 878) {
+				if (target != "unitalife") {
+					target = "unitalife";
+					changed = true;
+					activate(target);
+				}
+			}
+			else if (level > 878 && level < 945) {
+				if (target != "univ-energy") {
+					target = "univ-energy";
+					changed = true;
+					activate(target);
+				}
+			}
+			else if (level > 945) {
+				if (target != "omnia") {
+					target = "omnia";
+					changed = true;
+					activate(target);
+				}
+			}
+		}
+	}
+	//if changed target then apply to all
+	if (changed == true) {
+		changed = false;
+		exec("replacefile.script", "home", 3, target);
+		var pservers = getPurchasedServers();
+		for (var i = 0; i < pservers.length; i++) {
+
+			var serv = pservers[i];
+			var threads = (Math.floor(getServerMaxRam(serv) / getScriptRam("early-hack-template.script")));
+			scp("early-hack-template.script", serv);
+			killall(serv);
+			exec("early-hack-template.script", serv, threads, target);
+
+		}
+	}
+
+	//buy new servers
+	if (getPurchasedServers().length < getPurchasedServerLimit()) {
+
+		// every 2 servers double ram and thread count
+		if (getPurchasedServers().length > 0 && getPurchasedServers().length % 2 == 0 && !happened) {
+			happened = true;
+			ram *= 2;
+			thread *= 2;
+		}
+
+
+		if (getServerMoneyAvailable("home") > getPurchasedServerCost(ram)) {
+			// If we have enough money, then:
+			//  1. Purchase the server
+			//  2. Copy our hacking script onto the newly-purchased server
+			//  3. Run our hacking script on the newly-purchased server with 3 threads
+			//  4. Increment our iterator to indicate that we've bought a new server
+			var pservers = getPurchasedServers();
+			for (var i = 0; i < pservers.length; i++) {
+				var serv = pservers[i];
+				if (getServerMaxRam(serv) > ram) {
+					max = getServerMaxRam(ram);
+				}
+			}
+			happened = false;
+			var hostname = purchaseServer("p - " + getPurchasedServers().length + " - " + ram, ram);
+			scp("early-hack-template.script", hostname);
+			if (thread < (Math.floor(getServerMaxRam(hostname) / getScriptRam("early-hack-template.script")))) {
+				thread = (Math.floor(getServerMaxRam(hostname) / getScriptRam("early-hack-template.script")));
+			}
+			exec("early-hack-template.script", hostname, thread, target);
+
+		}
+	}
+}
