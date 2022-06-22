@@ -1,0 +1,22 @@
+var servers0Port = ["sigma-cosmetics",
+	"joesguns",
+	"nectar-net",
+	"hong-fang-tea",
+	"harakiri-sushi",
+	"silver-helix",
+	"phantasy",
+	"neo-net",
+	"zer0",
+	"omega-net",
+	"foodnstuff",
+	"CSEC",
+	"max-hardware",
+	"iron-gym"];
+
+// Copy our scripts onto each server that requires 0 ports
+// to gain root access. Then use nuke() to gain admin access and
+// run the scripts.
+for (var i = 0; i < servers0Port.length; ++i) {
+	var serv = servers0Port[i];
+	installBackdoor(serv);
+}
