@@ -97,7 +97,7 @@ while (true) {
 					activate(target);
 				}
 			}
-			else if (level > 301 && level < 403) {
+			else if (level > 301 && level < 377) {
 				if (target != "the-hub") {
 					target = "the-hub";
 					changed = true;
@@ -107,7 +107,15 @@ while (true) {
 		}
 		//3 ports
 		if (fileExists("relaySMTP.exe", "home")) {
-			if (level > 403 && level < 486) {
+			if(level>377&&level<403)
+			{
+				if(target!="netlink"){
+					target = "netlink";
+					changed = true;
+					activate(target);
+				}
+			}
+			else if (level > 403 && level < 486) {
 				if (target != "rothman-uni") {
 					target = "rothman-uni";
 					changed = true;
