@@ -49,7 +49,7 @@ for (var i = 0; i < servers1Port.length; ++i) {
     brutessh(serv);
     nuke(serv);
     var threads = (Math.floor(getServerMaxRam(serv) / getScriptRam("early-hack-template.script")));
-	exec("early-hack-template.script", serv, threads-300, target);
+	exec("early-hack-template.script", serv, threads, target);
 }
 
 
