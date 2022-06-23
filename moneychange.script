@@ -2,14 +2,14 @@ var target = "n00dles";
 nuke(target);
 var level = getPlayer().hacking;
 exec("script-startup.script", "home", 6, target);
-var minmoney = getServerMoneyAvailable(target)*100000;
+var minmoney = getServerMoneyAvailable(target) * 100000;
 //server starting buy
 var ram = 64;
 var thread = 24;
-var happened=false;
+var happened = false;
 
 function activate(t) {
-	minmoney = getServerMoneyAvailable(t) * 0.5;
+	minmoney = getServerMoneyAvailable(t) * 0.25;
 	var threads = (Math.floor(getServerMaxRam(t) / getScriptRam("early-hack-template.script")));
 	scp("early-hack-template.script", t);
 	if (fileExists("BruteSSH.exe", "home")) {
@@ -97,7 +97,7 @@ while (true) {
 					activate(target);
 				}
 			}
-			else if (level > 301 && level < 362) {
+			else if (level > 301 && level < 403) {
 				if (target != "the-hub") {
 					target = "the-hub";
 					changed = true;
@@ -107,14 +107,7 @@ while (true) {
 		}
 		//3 ports
 		if (fileExists("relaySMTP.exe", "home")) {
-			if (level > 362 && level < 403) {
-				if (target != "I.I.I.I") {
-					target = "I.I.I.I";
-					changed = true;
-					activate(target);
-				}
-			}
-			else if (level > 403 && level < 486) {
+			if (level > 403 && level < 486) {
 				if (target != "rothman-uni") {
 					target = "rothman-uni";
 					changed = true;
@@ -210,7 +203,13 @@ while (true) {
 			ram *= 2;
 			thread *= 2;
 		}
-
+		var pservers = getPurchasedServers();
+		for (var i = 0; i < pservers.length; i++) {
+			var serv = pservers[i];
+			if (getServerMaxRam(serv) > ram) {
+				ram = getServerMaxRam(serv);
+			}
+		}
 
 		if (getServerMoneyAvailable("home") > getPurchasedServerCost(ram)) {
 			// If we have enough money, then:
@@ -218,13 +217,7 @@ while (true) {
 			//  2. Copy our hacking script onto the newly-purchased server
 			//  3. Run our hacking script on the newly-purchased server with 3 threads
 			//  4. Increment our iterator to indicate that we've bought a new server
-			var pservers = getPurchasedServers();
-			for (var i = 0; i < pservers.length; i++) {
-				var serv = pservers[i];
-				if (getServerMaxRam(serv) > ram) {
-					max = getServerMaxRam(ram);
-				}
-			}
+
 			happened = false;
 			var hostname = purchaseServer("p - " + getPurchasedServers().length + " - " + ram, ram);
 			scp("early-hack-template.script", hostname);
